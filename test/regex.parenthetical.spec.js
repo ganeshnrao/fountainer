@@ -14,6 +14,14 @@ runRegexTests({
     {
       input: '    (hello world) (O.S)',
       output: { paren: '(hello world) (O.S)' }
+    },
+    {
+      input: '(beat',
+      output: null
+    },
+    {
+      input: 'hello world',
+      output: null
     }
   ]
 })

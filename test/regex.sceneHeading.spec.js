@@ -5,7 +5,7 @@ runRegexTests({
   regex: sceneHeading,
   groups: {
     scene: undefined,
-    powerScene: undefined
+    pScene: undefined
   },
   cases: [
     {
@@ -22,7 +22,7 @@ runRegexTests({
     },
     {
       input: 'int./ext. living room - night',
-      output: { scene: 'int/ext. living room - night' }
+      output: { scene: 'int./ext. living room - night' }
     },
     {
       input: 'est. living room - night',
@@ -34,7 +34,7 @@ runRegexTests({
     },
     {
       input: '.hello world',
-      output: { powerScene: 'hello world' }
+      output: { pScene: 'hello world' }
     },
     {
       input: '  INT. BEDROOM - DAY',

@@ -7,7 +7,7 @@ runRegexTests({
     name: undefined,
     paren: undefined,
     dual: undefined,
-    powerName: undefined
+    pName: undefined
   },
   cases: [
     {
@@ -15,7 +15,7 @@ runRegexTests({
       output: { name: 'FOOBAR' }
     },
     {
-      input: 'FOOBAR (O.S) (On the phone) ',
+      input: 'FOOBAR (O.S) (On the phone)   ',
       output: { name: 'FOOBAR', paren: '(O.S) (On the phone)' }
     },
     {
@@ -31,13 +31,21 @@ runRegexTests({
       output: null
     },
     {
-      input: '@foo bar (lowercase name)',
-      output: { powerName: 'foo bar', paren: '(lowercase name)' }
+      input: '@FooBar ^^',
+      output: null
+    },
+    {
+      input: '@foo bar, hello world (lowercase name) ^',
+      output: {
+        pName: 'foo bar, hello world',
+        paren: '(lowercase name)',
+        dual: '^'
+      }
     },
     {
       input: '   @Mr. Foobar $lastName #3 (lowercase name)',
       output: {
-        powerName: 'Mr. Foobar $lastName #3',
+        pName: 'Mr. Foobar $lastName #3',
         paren: '(lowercase name)'
       }
     }
