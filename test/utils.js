@@ -10,7 +10,7 @@ function runRegexTests({ regex, cases, groups }) {
           output ? { ...groups, ...output } : output
         )
       } else {
-        t.deepEqual(matches[0], output)
+        t.deepEqual(matches, output)
       }
     })
   })
