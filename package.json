@@ -1,0 +1,31 @@
+{
+  "name": "fountainhead",
+  "version": "1.0.0",
+  "description": "Javascript parser for Fountain files",
+  "main": "index.js",
+  "scripts": {
+    "testone": "NODE_ENV=test nyc --reporter=html --reporter=text ava",
+    "test": "npm run testone 'test/**/*.spec.js'"
+  },
+  "keywords": [
+    "fountain",
+    "screenplay",
+    "script",
+    "movie",
+    "writing"
+  ],
+  "author": "ganeshnrao@me.com",
+  "license": "ISC",
+  "devDependencies": {
+    "ava": "^3.15.0",
+    "eslint": "^7.24.0",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "nyc": "^15.1.0",
+    "prettier": "^2.2.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "yargs": "^16.2.0"
+  }
+}
