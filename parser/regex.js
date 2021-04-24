@@ -6,5 +6,6 @@ module.exports = {
   sceneHeading: /(^(?<scene>((INT\/EXT|I\/E|INT\.\/EXT|INT|EXT|EST)\.){1}\s*.*)$)|(^\.(?<pScene>[a-z]+.*)$)/i,
   section: /^(?<depth>#+)\s*(?<section>.+)/i,
   synopsis: /^=\s*(?<synopsis>.+)/i,
+  titlePage: /^\s*(?<field>title|credit|authors?|source|draft|(draft )?date|contact|copyright):\s*(?<value>.+)/i,
   transition: /^\s*(?<transition>(FADE [^a-z]+:)|([^a-z]+ TO:)\s*)|(>\s*(?<pTransition>[^\<]+))$/
 }
