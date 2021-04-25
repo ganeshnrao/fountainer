@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
-$width: 70ch;
+$width: 64ch;
 $lineNumberWidth: 6ch;
-$lineNumberMargin: 4ch;
+$lineInfoGutter: 4ch;
+$lineTypeWidth: 10ch;
 $characterMargin: 18ch;
 $parenMargin: 12ch;
 $dialogueMargin: 10ch;
-$lineWidth: $width + ($lineNumberWidth + $lineNumberMargin) * 2;
+$lineWidth: $width + $lineNumberWidth + $lineInfoGutter * 2 + $lineTypeWidth;
 $characterWidth: $width - $characterMargin * 2;
 $parenWidth: $width - $parenMargin * 2;
 $dialogueWidth: $width - $dialogueMargin * 2;
@@ -36,7 +37,7 @@ body {
 
 .script {
   width: $lineWidth;
-  @include centerMargin;
+  margin: 5em auto;
 }
 
 .line {
@@ -44,12 +45,19 @@ body {
   .line-number {
     float: left;
     width: $lineNumberWidth;
-    margin-right: $lineNumberMargin;
+    margin-right: $lineInfoGutter;
     color: #aaa;
   }
   .line-body {
     float: left;
     width: $width;
+  }
+  .line-type {
+    float: left;
+    width: $lineTypeWidth;
+    margin-left: $lineInfoGutter;
+    color: #aaa;
+    overflow-x: hidden;
   }
   &:hover {
     .line-number, .line-body {
@@ -92,11 +100,11 @@ body {
     color: #ccc;
   }
   .line {
-    .line-number {
+    .line-number, .line-type {
       color: #444;
     }
     &:hover {
-      .line-number, .line-body {
+      .line-number, .line-body, .line-type {
         color: rgb(0, 247, 255);
       }
     }
