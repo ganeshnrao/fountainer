@@ -187,7 +187,7 @@ const definitions = {
   },
   [names.titlePage]: {
     name: names.titlePage,
-    regex: /^\s*(?<field>title|credit|authors?|source|draft|(draft )?date|contact|copyright|notes):\s*(?<value>.+)/i,
+    regex: /^\s*(?<field>title|credit|authors?|source|draft|(draft )?date|contact|copyright|notes):\s*(?<value>.*)/i,
     next: prioritize([names.titlePage, names.empty]),
     post({ groups: { field, value } }) {
       let fieldName = camelCase(field)

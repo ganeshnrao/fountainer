@@ -1,8 +1,7 @@
 const { runRegexTests } = require('./utils')
-const {
-  definitions: { titlePage }
-} = require('../parser/tokens')
+const { definitions, names } = require('../parser/tokens')
 
+const titlePage = definitions[names.titlePage]
 const { name } = titlePage
 
 runRegexTests({
