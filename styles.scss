@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+$fontFamily: "Courier Prime", monospace;
+$fontSize: 16px;
 
 $width: 64ch;
 $lineNumberWidth: 6ch;
@@ -12,14 +15,26 @@ $characterWidth: $width - $characterMargin * 2;
 $parenWidth: $width - $parenMargin * 2;
 $dialogueWidth: $width - $dialogueMargin * 2;
 
+$lightBgColor: #eee;
+$lightLineColor: #333;
+$lightLineHoverColor: #000;
+$lightLineInfoColor: #aaa;
+$lightLineInfoHoverColor: #000;
+
+$darkBgColor: #222;
+$darkLineColor: #ccc;
+$darkLineHoverColor: #fff;
+$darkLineInfoColor: #444;
+$darkLineInfoHoverColor: #888;
+
 * {
-  font-family: 'Courier Prime', monospace;
-  font-size: 16px;
+  font-family: $fontFamily;
+  font-size: $fontSize;
 }
 
 body {
-  background-color: #eee;
-  color: #333;
+  background-color: $lightBgColor;
+  color: $lightLineColor;
 }
 
 @mixin clearfix {
@@ -30,7 +45,7 @@ body {
   }
 }
 
-@mixin centerMargin {
+@mixin centerMargin() {
   margin-left: auto;
   margin-right: auto;
 }
@@ -46,7 +61,7 @@ body {
     float: left;
     width: $lineNumberWidth;
     margin-right: $lineInfoGutter;
-    color: #aaa;
+    color: $lightLineInfoColor;
   }
   .line-body {
     float: left;
@@ -56,12 +71,16 @@ body {
     float: left;
     width: $lineTypeWidth;
     margin-left: $lineInfoGutter;
-    color: #aaa;
+    color: $lightLineInfoColor;
     overflow-x: hidden;
   }
   &:hover {
-    .line-number, .line-body {
-      color: #000;
+    .line-number,
+    .line-type {
+      color: $lightLineInfoHoverColor;
+    }
+    .line-body {
+      color: $lightLineHoverColor;
     }
   }
   @include clearfix;
@@ -96,16 +115,21 @@ body {
 
 @media (prefers-color-scheme: dark) {
   body {
-    background-color: #222;
-    color: #ccc;
+    background-color: $darkBgColor;
+    color: $darkLineColor;
   }
   .line {
-    .line-number, .line-type {
-      color: #444;
+    .line-number,
+    .line-type {
+      color: $darkLineInfoColor;
     }
     &:hover {
-      .line-number, .line-body, .line-type {
-        color: rgb(0, 247, 255);
+      .line-number,
+      .line-type {
+        color: $darkLineInfoHoverColor;
+      }
+      .line-body {
+        color: $darkLineHoverColor;
       }
     }
   }
