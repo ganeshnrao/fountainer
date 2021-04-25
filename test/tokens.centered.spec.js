@@ -1,11 +1,12 @@
 const { runRegexTests } = require('./utils')
-const { centered } = require('../parser/regex')
+const {
+  definitions: { centered }
+} = require('../parser/tokens')
+
+const { name } = centered
 
 runRegexTests({
-  regex: centered,
-  groups: {
-    centered: undefined
-  },
+  definition: centered,
   cases: [
     {
       input: '> Begin montage <:',
@@ -13,23 +14,23 @@ runRegexTests({
     },
     {
       input: '   > Begin montage <  ',
-      output: { centered: 'Begin montage' }
+      output: { name, text: 'Begin montage' }
     },
     {
       input: '   >Begin montage<',
-      output: { centered: 'Begin montage' }
+      output: { name, text: 'Begin montage' }
     },
     {
       input: '> flash back to when he was a young man <',
-      output: { centered: 'flash back to when he was a young man' }
+      output: { name, text: 'flash back to when he was a young man' }
     },
     {
       input: '>>> hello world <<<',
-      output: { centered: 'hello world' }
+      output: { name, text: 'hello world' }
     },
     {
       input: '>>> hello world <',
-      output: { centered: 'hello world' }
+      output: { name, text: 'hello world' }
     }
   ]
 })

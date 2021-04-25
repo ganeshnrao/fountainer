@@ -1,40 +1,44 @@
 const { runRegexTests } = require('./utils')
-const { sceneHeading } = require('../parser/regex')
+const {
+  definitions: { scene }
+} = require('../parser/tokens')
+
+const { name } = scene
 
 runRegexTests({
-  regex: sceneHeading,
-  groups: {
-    scene: undefined,
-    pScene: undefined
-  },
+  definition: scene,
   cases: [
     {
+      input: 'A RIVER.',
+      output: null
+    },
+    {
       input: 'int. living room - day',
-      output: { scene: 'int. living room - day' }
+      output: { name, text: 'int. living room - day' }
     },
     {
       input: 'ext. park - night',
-      output: { scene: 'ext. park - night' }
+      output: { name, text: 'ext. park - night' }
     },
     {
       input: 'i/e. living room - night',
-      output: { scene: 'i/e. living room - night' }
+      output: { name, text: 'i/e. living room - night' }
     },
     {
       input: 'int./ext. living room - night',
-      output: { scene: 'int./ext. living room - night' }
+      output: { name, text: 'int./ext. living room - night' }
     },
     {
       input: 'est. living room - night',
-      output: { scene: 'est. living room - night' }
+      output: { name, text: 'est. living room - night' }
     },
     {
       input: 'EST. Living Room - Night',
-      output: { scene: 'EST. Living Room - Night' }
+      output: { name, text: 'EST. Living Room - Night' }
     },
     {
       input: '.hello world',
-      output: { pScene: 'hello world' }
+      output: { name, text: 'hello world' }
     },
     {
       input: '  INT. BEDROOM - DAY',

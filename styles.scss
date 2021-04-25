@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+$width: 70ch;
+$lineNumberWidth: 6ch;
+$lineNumberMargin: 4ch;
+$characterMargin: 18ch;
+$parenMargin: 12ch;
+$dialogueMargin: 10ch;
+$lineWidth: $width + ($lineNumberWidth + $lineNumberMargin) * 2;
+$characterWidth: $width - $characterMargin * 2;
+$parenWidth: $width - $parenMargin * 2;
+$dialogueWidth: $width - $dialogueMargin * 2;
+
+* {
+  font-family: 'Courier Prime', monospace;
+  font-size: 16px;
+}
+
+body {
+  background-color: #eee;
+  color: #333;
+}
+
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin centerMargin {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.script {
+  width: $lineWidth;
+  @include centerMargin;
+}
+
+.line {
+  width: $lineWidth;
+  .line-number {
+    float: left;
+    width: $lineNumberWidth;
+    margin-right: $lineNumberMargin;
+    color: #aaa;
+  }
+  .line-body {
+    float: left;
+    width: $width;
+  }
+  &:hover {
+    .line-number, .line-body {
+      color: #000;
+    }
+  }
+  @include clearfix;
+}
+
+.scene {
+  font-weight: bold;
+}
+
+.character {
+  width: $characterWidth;
+  @include centerMargin;
+}
+
+.dialogue {
+  width: $dialogueWidth;
+  @include centerMargin;
+}
+
+.paren {
+  width: $parenWidth;
+  @include centerMargin;
+}
+
+.centered {
+  text-align: center;
+}
+
+.title-page {
+  text-align: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #222;
+    color: #ccc;
+  }
+  .line {
+    .line-number {
+      color: #444;
+    }
+    &:hover {
+      .line-number, .line-body {
+        color: rgb(0, 247, 255);
+      }
+    }
+  }
+}

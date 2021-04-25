@@ -1,17 +1,11 @@
 const ava = require('ava')
+const { getToken } = require('../parser/tokens')
 
-function runRegexTests({ regex, cases, groups }) {
+function runRegexTests({ definition, cases }) {
   cases.forEach(({ input, output }) => {
     ava(input, (t) => {
-      const matches = input.match(regex)
-      if (groups) {
-        t.deepEqual(
-          matches ? matches.groups : matches,
-          output ? { ...groups, ...output } : output
-        )
-      } else {
-        t.deepEqual(matches, output)
-      }
+      const actual = getToken(definition, input)
+      t.deepEqual(actual, output)
     })
   })
 }
