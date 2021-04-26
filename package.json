@@ -1,10 +1,11 @@
 {
-  "name": "fountainhead",
+  "name": "fountainer",
+  "displayName": "Fountainer",
   "version": "1.0.0",
   "description": "Convert screenplays written using the Fountain syntax into HTML files",
   "main": "index.js",
   "bin": {
-    "fountainhead": "index.js"
+    "fountainer": "index.js"
   },
   "scripts": {
     "sample": "node index.js -i sample.theBigFish.fountain -o dist/index.html && npm run serve",

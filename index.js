@@ -3,7 +3,7 @@ const fs = require('fs-extra')
 const path = require('path')
 const yargs = require('yargs')
 const { parse, toHtml } = require('./parser')
-const { description } = require('./package.json')
+const { displayName, description } = require('./package.json')
 const logger = require('./parser/logger')
 
 const options = {
@@ -82,7 +82,7 @@ const options = {
   }
 }
 const args = yargs
-  .usage(`\nFountainhead\n  ${description}`)
+  .usage(`\n${displayName}\n  ${description}`)
   .options(options)
   .showHelpOnFail(true)
   .help().argv
@@ -92,7 +92,7 @@ logger.verbose = args.verbose ? console.debug : noop
 async function main() {
   const startMs = Date.now()
   logger.verbose()
-  logger.verbose('Fountainhead arguments:')
+  logger.verbose(`${displayName} arguments:`)
   forOwn(options, (value, key) =>
     logger.verbose(`   --${key.padEnd(12)} = ${args[key]}`)
   )
