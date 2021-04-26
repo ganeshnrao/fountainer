@@ -1,6 +1,8 @@
+const fs = require('fs-extra')
 const { each } = require('lodash')
 const { prepare } = require('./prepare')
 const { definitions, getToken, names, namesByPriority } = require('./tokens')
+const getGitString = require('./git')
 
 function parseLine(line, context, next, prevLine) {
   let result = null
@@ -31,10 +33,25 @@ function parseLine(line, context, next, prevLine) {
   return { name: names.action, text: line }
 }
 
-module.exports = function parse(fountainString, keepNotes = false) {
-  const lines = prepare(fountainString, keepNotes)
+module.exports = async function parse({
+  inputFile,
+  inputString,
+  notesClass = 'inline-notes',
+  includeGitLine = true
+}) {
+  if (!inputFile && !inputString) {
+    throw new Error('inputFile or inputString must be provided')
+  }
+  const fountainString =
+    inputString || (await fs.readFile(inputFile, 'utf-8')).toString()
+  const lines = prepare(fountainString, notesClass)
   const titlePage = {}
   const titlePageLines = []
+  if (includeGitLine) {
+    const { titleLine, git } = await getGitString(inputFile)
+    titlePage.git = git
+    titlePageLines.push(titleLine)
+  }
   let context = {}
   let next = [names.titlePage]
   let prevLine = null

@@ -141,6 +141,9 @@ body {
   .line-body {
     text-align: center;
   }
+  &.git {
+    margin-bottom: 2em;
+  }
   &.credit,
   &.copyright,
   &.source,
@@ -158,6 +161,9 @@ body {
   body {
     background-color: map.get($colorMap, "bg");
     color: map.get($colorMap, "line");
+  }
+  .git {
+    color: map.get($colorMap, "info");
   }
   .line-info {
     color: map.get($colorMap, "info");
