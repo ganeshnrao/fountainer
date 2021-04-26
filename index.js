@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const { forOwn, noop } = require('lodash')
 const fs = require('fs-extra')
 const path = require('path')
