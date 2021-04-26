@@ -2,7 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 $fontFamily: "Courier Prime", monospace;
-$fontSize: 16px;
+$fontSize: 18px;
 $lineHeight: 1.4;
 
 $width: 56ch;
@@ -20,10 +20,10 @@ $parenWidth: $width - $parenMargin * 2;
 $dialogueWidth: $width - $dialogueMargin * 2;
 
 $light: (
-  "line": #333,
-  "notes": #777,
-  "info": #bbb,
-  "bg": #ddd,
+  "line": #111,
+  "notes": #aaa,
+  "info": #ddd,
+  "bg": #fff,
 );
 $dark: (
   "line": #bbb,
