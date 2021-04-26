@@ -4,7 +4,8 @@
   "description": "Javascript parser for Fountain files",
   "main": "index.js",
   "scripts": {
-    "sample": "node index.js && php -S localhost:9000 -t dist",
+    "sample": "node index.js && npm run serve",
+    "serve": "php -S localhost:9000 -t dist",
     "testone": "NODE_ENV=test nyc --reporter=html --reporter=text ava",
     "test": "npm run testone 'test/**/*.spec.js'"
   },
