@@ -69,7 +69,7 @@ const definitions = {
       names.notes,
       names.action
     ]),
-    regex: /^\s*>+\s*(?<centered>([^<\s]+)(\s*[^<\s])*)\s*<+\s*$/,
+    regex: /^\s*>+\s*(?<centered>.*?)\s*<+\s*$/,
     post({ groups: { centered } }) {
       return { text: centered }
     }

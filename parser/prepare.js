@@ -9,29 +9,50 @@ const regex = {
 }
 const skip = '[skip]'
 
-function replaceWithSpanNotes(match, noteString) {
-  return noteString
-    .split('\n')
-    .map((note) => `<span class="notes">${note}</span>`)
-    .join('\n')
-}
-
 function replaceWithSkip(match) {
   const nLines = match.split('\n').length
   return new Array(nLines).join(`${skip}\n`)
+}
+
+function getNotesReplacer(noteClass) {
+  return noteClass
+    ? (match, noteString) => {
+        return noteString
+          .split('\n')
+          .map((note) => `<span class="${noteClass}">${note}</span>`)
+          .join('\n')
+      }
+    : replaceWithSkip
 }
 
 function removeBoneyards(fountainString) {
   return fountainString.replace(regex.boneyard, replaceWithSkip)
 }
 
-function prepare(fountainString, keepNotes) {
+function getTagWrapReplacer(...tags) {
+  const prefix = []
+  const suffix = []
+  tags.forEach((tag) => {
+    prefix.push(`<${tag}>`)
+    suffix.unshift(`</${tag}>`)
+  })
+  const open = prefix.join('')
+  const close = suffix.join('')
+  return (match, innerString) => {
+    return innerString
+      .split('\n')
+      .map((text) => `${open}${text}${close}`)
+      .join('\n')
+  }
+}
+
+function prepare(fountainString, noteClass = null) {
   return removeBoneyards(fountainString)
-    .replace(regex.notes, keepNotes ? replaceWithSpanNotes : replaceWithSkip)
-    .replace(regex.underline, '<u>$1</u>')
-    .replace(regex.boldItalics, '<em><strong>$1</strong></em>')
-    .replace(regex.bold, '<strong>$1</strong>')
-    .replace(regex.italics, '<em>$1</em>')
+    .replace(regex.notes, getNotesReplacer(noteClass))
+    .replace(regex.underline, getTagWrapReplacer('u'))
+    .replace(regex.boldItalics, getTagWrapReplacer('em', 'strong'))
+    .replace(regex.bold, getTagWrapReplacer('strong'))
+    .replace(regex.italics, getTagWrapReplacer('em'))
     .split('\n')
     .reduce((acc, line, index) => {
       if (line !== skip) {

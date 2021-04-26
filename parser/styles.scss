@@ -1,3 +1,4 @@
+@use "sass:map";
 @import url("https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 $fontFamily: "Courier Prime", monospace;
@@ -16,19 +17,24 @@ $characterWidth: $width - $characterMargin * 2;
 $parenWidth: $width - $parenMargin * 2;
 $dialogueWidth: $width - $dialogueMargin * 2;
 
-$lightBgColor: #eee;
-$lightLineColor: #333;
-$lightLineHoverColor: #000;
-$lightLineInfoColor: #aaa;
-$lightLineInfoHoverColor: #000;
-$lightNotesColor: #666;
-
-$darkBgColor: #222;
-$darkLineColor: #ccc;
-$darkLineHoverColor: #fff;
-$darkLineInfoColor: #444;
-$darkLineInfoHoverColor: #888;
-$darkNotesColor: #444;
+$light: (
+  "lineHover": #111,
+  "line": #333,
+  "notesHover": #555,
+  "notes": #777,
+  "infoHover": #999,
+  "info": #bbb,
+  "bg": #ddd,
+);
+$dark: (
+  "lineHover": #ddd,
+  "line": #bbb,
+  "notesHover": #999,
+  "notes": #777,
+  "infoHover": #555,
+  "info": #333,
+  "bg": #111,
+);
 
 * {
   font-family: $fontFamily;
@@ -38,8 +44,6 @@ $darkNotesColor: #444;
 
 body {
   -webkit-font-smoothing: antialiased;
-  background-color: $lightBgColor;
-  color: $lightLineColor;
 }
 
 @mixin clearfix {
@@ -65,10 +69,9 @@ body {
   position: relative;
   .line-number {
     position: absolute;
+    top: 0;
     left: 0;
     width: $lineInfoWidth;
-    margin-right: $lineInfoGutter;
-    color: $lightLineInfoColor;
   }
   .line-body {
     width: $width;
@@ -76,22 +79,9 @@ body {
   }
   .line-type {
     position: absolute;
+    top: 0;
     right: 0;
     width: $lineInfoWidth;
-    margin-left: $lineInfoGutter;
-    color: $lightLineInfoColor;
-  }
-  &:hover {
-    .line-number,
-    .line-type {
-      color: $lightLineInfoHoverColor;
-    }
-    .line-body {
-      color: $lightLineHoverColor;
-    }
-    .notes {
-      color: $lightLineColor;
-    }
   }
   @include clearfix;
 }
@@ -127,40 +117,47 @@ body {
   .line-body {
     text-align: center;
   }
-  &.credit, &.copyright, &.contact {
+  &.credit,
+  &.copyright,
+  &.contact {
     margin-top: 1em;
   }
 }
 
-.notes {
+.inline-notes {
   font-style: italic;
-  color: $lightNotesColor;
 }
 
-@media (prefers-color-scheme: dark) {
+@mixin theme($colorMap) {
   body {
-    background-color: $darkBgColor;
-    color: $darkLineColor;
+    background-color: map.get($colorMap, "bg");
+    color: map.get($colorMap, "line");
   }
   .line {
     .line-number,
     .line-type {
-      color: $darkLineInfoColor;
+      color: map.get($colorMap, "info");
+    }
+    .inline-notes {
+      color: map.get($colorMap, "notes");
     }
     &:hover {
       .line-number,
       .line-type {
-        color: $darkLineInfoHoverColor;
+        color: map.get($colorMap, "infoHover");
       }
       .line-body {
-        color: $darkLineHoverColor;
+        color: map.get($colorMap, "lineHover");
       }
-      .notes {
-        color: $darkLineColor;
+      .inline-notes {
+        color: map.get($colorMap, "notesHover");
       }
     }
   }
-  .notes {
-    color: $darkNotesColor;
-  }
+}
+
+@include theme($light);
+
+@media (prefers-color-scheme: dark) {
+  @include theme($dark);
 }

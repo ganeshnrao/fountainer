@@ -1,17 +1,9 @@
 const fs = require('fs-extra')
 const { template } = require('lodash')
-const { render: renderSass } = require('node-sass')
+const sass = require('sass')
 const path = require('path')
 
-function getCss(scssPath) {
-  return new Promise((resolve, reject) => {
-    renderSass({ file: scssPath }, (error, result) => {
-      return error ? reject(error) : resolve(result.css.toString())
-    })
-  })
-}
-
-module.exports = async function (
+module.exports = function (
   { titlePage, lines, titlePageLines },
   {
     includeTitles = false,
@@ -19,8 +11,8 @@ module.exports = async function (
     templatePath = path.resolve(__dirname, 'template.ejs')
   } = {}
 ) {
-  const css = await getCss(scssPath)
-  const templateString = await fs.readFile(templatePath)
+  const css = sass.renderSync({ file: scssPath }).css.toString()
+  const templateString = fs.readFileSync(templatePath)
   const compileHtml = template(templateString)
   return compileHtml({
     titlePage,

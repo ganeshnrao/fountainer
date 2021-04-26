@@ -31,6 +31,10 @@ runRegexTests({
     {
       input: '>>> hello world <',
       output: { name, text: 'hello world' }
+    },
+    {
+      input: '> <u>hello world</u> <',
+      output: { name, text: '<u>hello world</u>' }
     }
   ]
 })

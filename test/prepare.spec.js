@@ -77,7 +77,7 @@ more comments
     ]
   },
   {
-    fn: (input) => prepare(input, true),
+    fn: (input) => prepare(input, 'notes'),
     name: 'keep notes',
     input: 'hello world [[this note will be kept]] some more [[text]]',
     expected: [
@@ -89,7 +89,7 @@ more comments
     ]
   },
   {
-    fn: (input) => prepare(input, true),
+    fn: (input) => prepare(input, 'notes'),
     name: 'keep multiline notes',
     input: `hello world [[this note 
 will be kept]] some more text`,
@@ -100,6 +100,22 @@ will be kept]] some more text`,
       },
       {
         line: '<span class="notes">will be kept</span> some more text',
+        lineNumber: 2
+      }
+    ]
+  },
+  {
+    fn: prepare,
+    name: 'multiline styles',
+    input: `this **bold string
+spans multiple lines** but it won't work`,
+    expected: [
+      {
+        line: 'this <strong>bold string</strong>',
+        lineNumber: 1
+      },
+      {
+        line: "<strong>spans multiple lines</strong> but it won't work",
         lineNumber: 2
       }
     ]

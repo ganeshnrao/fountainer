@@ -16,18 +16,15 @@ const samplePath = path.resolve(__dirname, sample)
 const htmlPath = path.resolve(__dirname, 'dist/index.html')
 const jsonPath = path.resolve(__dirname, 'dist/parsed.json')
 
-async function main() {
+function main() {
   console.log(`Building ${sample}`)
   const outputDir = path.dirname(htmlPath)
   const fountainString = fs.readFileSync(samplePath, 'utf-8')
-  const parsed = parse(fountainString, true)
-  const html = await toHtml(parsed)
+  const parsed = parse(fountainString, 'inline-notes')
+  const html = toHtml(parsed)
   fs.ensureDirSync(outputDir)
   fs.writeFileSync(jsonPath, JSON.stringify(parsed, null, '  '))
   fs.writeFileSync(htmlPath, html)
 }
 
-main().catch((error) => {
-  console.error(error)
-  process.exit(1)
-})
+main()
