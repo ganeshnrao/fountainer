@@ -20,20 +20,14 @@ $parenWidth: $width - $parenMargin * 2;
 $dialogueWidth: $width - $dialogueMargin * 2;
 
 $light: (
-  "lineHover": #111,
   "line": #333,
-  "notesHover": #555,
   "notes": #777,
-  "infoHover": #999,
   "info": #bbb,
   "bg": #ddd,
 );
 $dark: (
-  "lineHover": #ddd,
   "line": #bbb,
-  "notesHover": #999,
   "notes": #777,
-  "infoHover": #555,
   "info": #333,
   "bg": #111,
 );
@@ -173,13 +167,7 @@ body {
   }
   .line:hover {
     .line-info {
-      color: map.get($colorMap, "infoHover");
-    }
-    .line-body {
-      color: map.get($colorMap, "lineHover");
-    }
-    .inline-notes {
-      color: map.get($colorMap, "notesHover");
+      color: map.get($colorMap, "line");
     }
   }
 }
