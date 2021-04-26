@@ -151,6 +151,10 @@ body {
   font-style: italic;
 }
 
+.page-break {
+  margin-bottom: 5em;
+}
+
 @mixin theme($colorMap) {
   body {
     background-color: map.get($colorMap, "bg");

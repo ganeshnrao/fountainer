@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= titlePage.title %></title>
+  <title><%= _.get(titlePage, 'title', []).join('').replace(/<[^>]*>/gim, '') %></title>
   <%= css ? `<style>${css}</style>` : '' %>
 </head>
 <body>
@@ -19,7 +19,7 @@
     <% _.each(lines, ({ text, name, field = '', lineNumber }) => { %>
       <div class="line">
         <% if (options.lineNumbers !== 'none') { %>
-          <% if (name !== "empty" && options.lineNumbers === 'non-empty' || options.lineNumbers === 'all') { %>
+          <% if (options.lineNumbers === 'all' || options.lineNumbers === 'non-empty' && !!text) { %>
             <div class="line-info line-number"><%= lineNumber %></div>
           <% } %>
         <% } %>

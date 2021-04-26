@@ -13,6 +13,7 @@ function parseLine(line, context, next, prevLine) {
       return false
     }
   })
+  result = result || getToken(definitions[names.pageBreak], line)
   if (result) {
     return result
   }

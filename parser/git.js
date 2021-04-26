@@ -15,9 +15,10 @@ function run(cmd) {
   )
 }
 
-async function getGitHash() {
+async function getGitHash(inputFile) {
   try {
-    const hash = await run('git rev-parse HEAD | cut -c 1-8')
+    const dir = path.dirname(inputFile)
+    const hash = await run(`cd ${dir} && git rev-parse HEAD | cut -c 1-8`)
     return hash
   } catch (error) {
     logger.verbose('Failed to read git hash', error)
@@ -25,11 +26,11 @@ async function getGitHash() {
   }
 }
 
-async function getGitCommitCounts(filePath) {
+async function getGitCommitCounts(inputFile) {
   try {
-    const dir = path.dirname(filePath)
+    const dir = path.dirname(inputFile)
     const nCommits = await run(
-      `cd ${dir} && git log --oneline ${filePath} | wc -l`
+      `cd ${dir} && git log --oneline ${inputFile} | wc -l`
     )
     return nCommits
   } catch (error) {
@@ -39,7 +40,7 @@ async function getGitCommitCounts(filePath) {
 }
 
 module.exports = async function getGitString(inputFile) {
-  const hash = await getGitHash()
+  const hash = await getGitHash(inputFile)
   const hashString = hash ? ` (${hash})` : ''
   const nCommits = await getGitCommitCounts(inputFile)
   const draftNumber = nCommits ? `Draft #${nCommits}` : ''

@@ -8,6 +8,7 @@ const names = {
   dialogue: 'dialogue',
   empty: 'empty',
   notes: 'notes',
+  pageBreak: 'page-break',
   paren: 'paren',
   scene: 'scene',
   section: 'section',
@@ -27,6 +28,7 @@ const namesByPriority = [
   names.paren,
   names.action,
   names.dialogue,
+  names.pageBreak,
   names.default
 ]
 const priority = namesByPriority.reduce((acc, type, index) => {
@@ -127,6 +129,14 @@ const definitions = {
       const lastNote = matches.pop()
       const isInsideNote = !lastNote.endsWith(']]')
       return { text, notes, context: { isInsideNote } }
+    }
+  },
+  [names.pageBreak]: {
+    name: names.pageBreak,
+    regex: /^={3,}\s*$/,
+    next: namesByPriority,
+    post() {
+      return { text: '' }
     }
   },
   [names.paren]: {
