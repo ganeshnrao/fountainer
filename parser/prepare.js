@@ -14,12 +14,12 @@ function replaceWithSkip(match) {
   return new Array(nLines).join(`${skip}\n`)
 }
 
-function getNotesReplacer(noteClass) {
-  return noteClass
+function getNotesReplacer(notesClass) {
+  return notesClass
     ? (match, noteString) => {
         return noteString
           .split('\n')
-          .map((note) => `<span class="${noteClass}">${note}</span>`)
+          .map((note) => `<span class="${notesClass}">${note}</span>`)
           .join('\n')
       }
     : replaceWithSkip
@@ -46,9 +46,9 @@ function getTagWrapReplacer(...tags) {
   }
 }
 
-function prepare(fountainString, noteClass = null) {
+function prepare(fountainString, notesClass = null) {
   return removeBoneyards(fountainString)
-    .replace(regex.notes, getNotesReplacer(noteClass))
+    .replace(regex.notes, getNotesReplacer(notesClass))
     .replace(regex.underline, getTagWrapReplacer('u'))
     .replace(regex.boldItalics, getTagWrapReplacer('em', 'strong'))
     .replace(regex.bold, getTagWrapReplacer('strong'))

@@ -5,11 +5,11 @@ const { names } = require('./tokens')
 const logger = require('./logger')
 
 function run(cmd) {
-  logger.verbose(`> ${cmd}`)
+  logger.verbose(`  > ${cmd}`)
   return new Promise((resolve, reject) =>
     exec(cmd, (error, stdout, stderr) => {
       const fail = error || stderr.trim()
-      logger.verbose(`  ${fail || stdout.trim()}`)
+      logger.verbose(`    ${fail || stdout.trim()}`)
       return fail ? reject(fail) : resolve(stdout.trim())
     })
   )
@@ -40,6 +40,7 @@ async function getGitCommitCounts(inputFile) {
 }
 
 module.exports = async function getGitString(inputFile) {
+  logger.verbose(`Inferring draft number and git hash for ${inputFile}`)
   const hash = await getGitHash(inputFile)
   const hashString = hash ? ` (${hash})` : ''
   const nCommits = await getGitCommitCounts(inputFile)

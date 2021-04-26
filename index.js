@@ -18,21 +18,21 @@ const options = {
   },
   keepNotes: {
     alias: 'n',
-    description: 'print notes from the fountain file',
+    description: 'render notes from the fountain file',
     type: 'boolean',
     default: false
   },
   gitLine: {
     alias: 'g',
     description:
-      'print the draft number by counting the number of commits on the fountain file. Note that this will only work if your fountain file is part of a Git repository',
+      'render the draft number by counting the number of commits on the fountain file. This will only work if the file is part of a Git repository',
     type: 'boolean',
     default: false
   },
   lineNumbers: {
     alias: 'l',
     description:
-      'print line numbers corresponding to lines in the fountain file',
+      'render line numbers corresponding to lines in the fountain file',
     choices: ['none', 'all', 'non-empty'],
     type: 'string',
     default: 'none'
@@ -45,13 +45,13 @@ const options = {
   },
   debug: {
     alias: 'd',
-    description: 'print inferred class on each line',
+    description: 'render the inferred class on each line',
     type: 'boolean',
     default: false
   },
   verbose: {
     alias: 'v',
-    description: 'print verbose logging',
+    description: 'print verbose logging to console',
     type: 'boolean',
     default: false
   },
@@ -63,10 +63,26 @@ const options = {
     coerce(outputFile) {
       return path.resolve(outputFile)
     }
+  },
+  stylesPath: {
+    alias: 's',
+    description: 'path to a custom CSS or SCSS file',
+    default: path.resolve(__dirname, 'parser/styles.scss'),
+    coerce(scssPath) {
+      return path.resolve(scssPath)
+    }
+  },
+  templatePath: {
+    alias: 'p',
+    description: 'path to a custom template, can be an EJS or HTML file',
+    default: path.resolve(__dirname, 'parser/template.ejs'),
+    coerce(template) {
+      return path.resolve(template)
+    }
   }
 }
 const args = yargs
-  .usage(`\nFountainhead:\n  ${description}`)
+  .usage(`\nFountainhead\n  ${description}`)
   .options(options)
   .showHelpOnFail(true)
   .help().argv
@@ -76,13 +92,13 @@ logger.verbose = args.verbose ? console.debug : noop
 async function main() {
   const startMs = Date.now()
   logger.verbose()
-  logger.verbose('Fountainhead')
+  logger.verbose('Fountainhead arguments:')
   forOwn(options, (value, key) =>
     logger.verbose(`   --${key.padEnd(12)} = ${args[key]}`)
   )
   const { outputFile } = args
   const parsed = await parse(args)
-  const html = toHtml(parsed)
+  const html = toHtml(parsed, args)
   const outputDir = path.dirname(outputFile)
   await fs.ensureDir(outputDir)
   await fs.writeFile(outputFile, html)

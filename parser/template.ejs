@@ -9,6 +9,7 @@
 </head>
 <body>
   <div class="script">
+    <% if (options.titlePage) { %>
     <div class="titles">
       <% _.forOwn(titlePage, (lines, field) => { %>
         <div class="line title-page <%= field %>">
@@ -16,12 +17,11 @@
         </div>
       <% }) %>
     </div>
+    <% } %>
     <% _.each(lines, ({ text, name, field = '', lineNumber }) => { %>
       <div class="line">
-        <% if (options.lineNumbers !== 'none') { %>
-          <% if (options.lineNumbers === 'all' || options.lineNumbers === 'non-empty' && !!text) { %>
-            <div class="line-info line-number"><%= lineNumber %></div>
-          <% } %>
+        <% if (options.lineNumbers === 'all' || options.lineNumbers === 'non-empty' && !!text) { %>
+          <div class="line-info line-number"><%= lineNumber %></div>
         <% } %>
         <div class="line-body">
           <div class="<%= name %> <%= field %>"><%= text || '&nbsp;' %></div>
