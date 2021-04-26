@@ -2,16 +2,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 $fontFamily: "Courier Prime", monospace;
-$fontSize: 20px;
+$fontSize: 16px;
 $lineHeight: 1.4;
 
 $width: 64ch;
 $lineInfoWidth: 10ch;
 $lineInfoGutter: 4ch;
+$sceneNumberWidth: 4ch;
+$sceneNumberGutter: 2ch;
 $characterMargin: 18ch;
 $parenMargin: 12ch;
 $dialogueMargin: 10ch;
-$lineMargin: ($lineInfoGutter + $lineInfoWidth) * 2;
+$lineMargin: ($lineInfoGutter + $lineInfoWidth) * 2 + $sceneNumberWidth + $sceneNumberGutter;
 $lineWidth: $width + $lineMargin;
 $characterWidth: $width - $characterMargin * 2;
 $parenWidth: $width - $parenMargin * 2;
@@ -44,6 +46,7 @@ $dark: (
 
 body {
   -webkit-font-smoothing: antialiased;
+  counter-reset: scene;
 }
 
 @mixin clearfix {
@@ -67,23 +70,27 @@ body {
 .line {
   width: $lineWidth;
   position: relative;
-  .line-number {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: $lineInfoWidth;
-  }
-  .line-body {
-    width: $width;
-    @include centerMargin;
-  }
-  .line-type {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: $lineInfoWidth;
-  }
   @include clearfix;
+}
+
+.line-info {
+  position: absolute;
+  top: 0;
+  width: $lineInfoWidth;
+}
+
+.line-number {
+  text-align: right;
+  left: 0;
+}
+
+.line-body {
+  width: $width;
+  @include centerMargin;
+}
+
+.line-type {
+  right: 0;
 }
 
 .scene {
@@ -98,6 +105,23 @@ body {
 .dialogue {
   width: $dialogueWidth;
   @include centerMargin;
+}
+
+.transition {
+  text-align: right;
+}
+
+.scene {
+  margin-top: 3em;
+  &:before {
+    counter-increment: scene;
+    content: counter(scene);
+    font-weight: bold;
+    text-align: right;
+    float: left;
+    width: $sceneNumberWidth;
+    margin-left: -($sceneNumberGutter + $sceneNumberWidth);
+  }
 }
 
 .paren {
@@ -119,8 +143,10 @@ body {
   }
   &.credit,
   &.copyright,
+  &.source,
+  &.notes,
   &.contact {
-    margin-top: 1em;
+    margin-top: 2em;
   }
 }
 
@@ -133,25 +159,21 @@ body {
     background-color: map.get($colorMap, "bg");
     color: map.get($colorMap, "line");
   }
-  .line {
-    .line-number,
-    .line-type {
-      color: map.get($colorMap, "info");
+  .line-info {
+    color: map.get($colorMap, "info");
+  }
+  .inline-notes {
+    color: map.get($colorMap, "notes");
+  }
+  .line:hover {
+    .line-info {
+      color: map.get($colorMap, "infoHover");
+    }
+    .line-body {
+      color: map.get($colorMap, "lineHover");
     }
     .inline-notes {
-      color: map.get($colorMap, "notes");
-    }
-    &:hover {
-      .line-number,
-      .line-type {
-        color: map.get($colorMap, "infoHover");
-      }
-      .line-body {
-        color: map.get($colorMap, "lineHover");
-      }
-      .inline-notes {
-        color: map.get($colorMap, "notesHover");
-      }
+      color: map.get($colorMap, "notesHover");
     }
   }
 }

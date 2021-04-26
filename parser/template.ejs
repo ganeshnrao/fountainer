@@ -18,11 +18,11 @@
     </div>
     <% _.each(lines, ({ text, name, field = '', lineNumber }) => { %>
       <div class="line">
-        <div class="line-number"><%= lineNumber %></div>
+        <div class="line-info line-number"><%= lineNumber %></div>
         <div class="line-body">
           <div class="<%= name %> <%= field %>"><%= text || '&nbsp;' %></div>
         </div>
-        <div class="line-type"><%= field || name %></div>
+        <div class="line-info line-type"><%= field || name %></div>
       </div>
     <% }) %>
   </div>
