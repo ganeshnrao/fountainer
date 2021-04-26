@@ -3,6 +3,7 @@ const { each } = require('lodash')
 const { prepare } = require('./prepare')
 const { definitions, getToken, names, namesByPriority } = require('./tokens')
 const getGitString = require('./git')
+const logger = require('./logger')
 
 function parseLine(line, context, next, prevLine) {
   let result = null
@@ -36,21 +37,24 @@ function parseLine(line, context, next, prevLine) {
 module.exports = async function parse({
   inputFile,
   inputString,
-  notesClass = 'inline-notes',
-  renderGitLine = false,
-  renderTitlePage = true,
+  keepNotes: notesClass = 'inline-notes',
+  gitLine: renderGitLine = false,
   lineNumbers = false,
+  titlePage: renderTitlePage = true,
   debug = false
 }) {
   if (!inputFile && !inputString) {
     throw new Error('inputFile or inputString must be provided')
   }
+  logger.verbose(`Reading ${inputFile}`)
   const fountainString =
     inputString || (await fs.readFile(inputFile, 'utf-8')).toString()
+  logger.verbose('Preprocessing fountain file')
   const lines = prepare(fountainString, notesClass)
   const titlePage = {}
   const titlePageLines = []
   if (renderGitLine) {
+    logger.verbose('Inferring draft number and git hash')
     const { titleLine, git } = await getGitString(inputFile)
     titlePage.git = git
     titlePageLines.push(titleLine)
@@ -58,6 +62,7 @@ module.exports = async function parse({
   let context = {}
   let next = [names.titlePage]
   let prevLine = null
+  logger.verbose('Parsing lines')
   const result = lines.reduce((acc, { line, lineNumber }) => {
     const parsed = parseLine(line, context, next, prevLine)
     const { name } = parsed

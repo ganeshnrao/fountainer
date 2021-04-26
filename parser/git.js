@@ -1,11 +1,15 @@
 const { compact } = require('lodash')
 const { exec } = require('child_process')
+const path = require('path')
 const { names } = require('./tokens')
+const logger = require('./logger')
 
 function run(cmd) {
+  logger.verbose(`> ${cmd}`)
   return new Promise((resolve, reject) =>
     exec(cmd, (error, stdout, stderr) => {
       const fail = error || stderr.trim()
+      logger.verbose(`  ${fail || stdout.trim()}`)
       return fail ? reject(fail) : resolve(stdout.trim())
     })
   )
@@ -16,17 +20,20 @@ async function getGitHash() {
     const hash = await run('git rev-parse HEAD | cut -c 1-8')
     return hash
   } catch (error) {
-    console.debug('Failed to read git hash')
+    logger.verbose('Failed to read git hash', error)
     return ''
   }
 }
 
 async function getGitCommitCounts(filePath) {
   try {
-    const nCommits = await run(`git log --oneline ${filePath} | wc -l`)
+    const dir = path.dirname(filePath)
+    const nCommits = await run(
+      `cd ${dir} && git log --oneline ${filePath} | wc -l`
+    )
     return nCommits
   } catch (error) {
-    console.debug('Failed to read git commit count')
+    logger.verbose('Failed to read git commit count', error)
     return ''
   }
 }
