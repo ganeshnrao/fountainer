@@ -37,7 +37,10 @@ module.exports = async function parse({
   inputFile,
   inputString,
   notesClass = 'inline-notes',
-  includeGitLine = true
+  renderGitLine = false,
+  renderTitlePage = true,
+  lineNumbers = false,
+  debug = false
 }) {
   if (!inputFile && !inputString) {
     throw new Error('inputFile or inputString must be provided')
@@ -47,7 +50,7 @@ module.exports = async function parse({
   const lines = prepare(fountainString, notesClass)
   const titlePage = {}
   const titlePageLines = []
-  if (includeGitLine) {
+  if (renderGitLine) {
     const { titleLine, git } = await getGitString(inputFile)
     titlePage.git = git
     titlePageLines.push(titleLine)
@@ -73,5 +76,17 @@ module.exports = async function parse({
     }
     return acc
   }, [])
-  return { titlePage, lines: result, titlePageLines }
+  return {
+    titlePage,
+    lines: result,
+    options: {
+      inputFile,
+      inputString,
+      notesClass,
+      renderTitlePage,
+      renderGitLine,
+      lineNumbers,
+      debug
+    }
+  }
 }

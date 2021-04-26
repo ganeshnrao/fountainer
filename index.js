@@ -8,10 +8,7 @@ const jsonPath = path.resolve(__dirname, 'dist/parsed.json')
 
 async function main() {
   const outputDir = path.dirname(htmlPath)
-  const parsed = await parse({
-    inputFile: samplePath,
-    notesClass: 'inline-notes'
-  })
+  const parsed = await parse({ inputFile: samplePath, lineNumbers: true })
   const html = toHtml(parsed)
   fs.ensureDirSync(outputDir)
   fs.writeFileSync(jsonPath, JSON.stringify(parsed, null, '  '))

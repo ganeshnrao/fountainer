@@ -4,9 +4,8 @@ const sass = require('sass')
 const path = require('path')
 
 module.exports = function (
-  { titlePage, lines, titlePageLines },
+  parsed,
   {
-    includeTitles = false,
     scssPath = path.resolve(__dirname, 'styles.scss'),
     templatePath = path.resolve(__dirname, 'template.ejs')
   } = {}
@@ -14,9 +13,5 @@ module.exports = function (
   const css = sass.renderSync({ file: scssPath }).css.toString()
   const templateString = fs.readFileSync(templatePath)
   const compileHtml = template(templateString)
-  return compileHtml({
-    titlePage,
-    lines: includeTitles ? [...titlePageLines, ...lines] : lines,
-    css
-  })
+  return compileHtml({ ...parsed, css })
 }

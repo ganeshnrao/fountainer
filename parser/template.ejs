@@ -18,12 +18,15 @@
     </div>
     <% _.each(lines, ({ text, name, field = '', lineNumber }) => { %>
       <div class="line">
-        <% if (name !== "empty") { %>
+        <% if (name !== "empty" && options.lineNumbers) { %>
         <div class="line-info line-number"><%= lineNumber %></div>
         <% } %>
         <div class="line-body">
           <div class="<%= name %> <%= field %>"><%= text || '&nbsp;' %></div>
         </div>
+        <% if (options.debug) { %>
+          <div class="line-info line-type"><%= name %></div>
+        <% } %>
       </div>
     <% }) %>
   </div>
