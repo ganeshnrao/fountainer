@@ -5,7 +5,9 @@ const regex = {
   underline: /_{1}([^_]+)_{1}/gim,
   boneyard: /\n?\/\*[^]*?\*\/\n?/gim,
   notes: /\[\[([^]*?)\]\]/gim,
-  skip: /\[skip\]/gm
+  skip: /\[skip\]/gm,
+  escapedCharacters: /\\([*_]{1})/gim,
+  restoreEscapedCharacters: /(\[escape:(star|underscore)\])/gim
 }
 const skip = '[skip]'
 
@@ -46,13 +48,23 @@ function getTagWrapReplacer(...tags) {
   }
 }
 
+function getEscapeCharacterReplacer(match, character) {
+  return character === '*' ? '[escape:star]' : '[escape:underscore]'
+}
+
+function restoreEscapedCharactersReplacer(match) {
+  return match === '[escape:star]' ? '*' : '_'
+}
+
 function prepare(fountainString, notesClass = null) {
   return removeBoneyards(fountainString)
+    .replace(regex.escapedCharacters, getEscapeCharacterReplacer)
     .replace(regex.notes, getNotesReplacer(notesClass))
     .replace(regex.underline, getTagWrapReplacer('u'))
     .replace(regex.boldItalics, getTagWrapReplacer('em', 'strong'))
     .replace(regex.bold, getTagWrapReplacer('strong'))
     .replace(regex.italics, getTagWrapReplacer('em'))
+    .replace(regex.restoreEscapedCharacters, restoreEscapedCharactersReplacer)
     .split('\n')
     .reduce((acc, line, index) => {
       if (line !== skip) {

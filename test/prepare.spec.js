@@ -119,6 +119,12 @@ spans multiple lines** but it won't work`,
         lineNumber: 2
       }
     ]
+  },
+  {
+    fn: prepare,
+    name: 'keep escaped characters',
+    input: 'hello \\_\\*world\\*\\_ some more text',
+    expected: [{ lineNumber: 1, line: 'hello _*world*_ some more text' }]
   }
 ]
 
