@@ -1,16 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 $fontFamily: "Courier Prime", monospace;
-$fontSize: 16px;
+$fontSize: 20px;
+$lineHeight: 1.4;
 
 $width: 64ch;
-$lineNumberWidth: 6ch;
+$lineInfoWidth: 10ch;
 $lineInfoGutter: 4ch;
-$lineTypeWidth: 10ch;
 $characterMargin: 18ch;
 $parenMargin: 12ch;
 $dialogueMargin: 10ch;
-$lineWidth: $width + $lineNumberWidth + $lineInfoGutter * 2 + $lineTypeWidth;
+$lineMargin: ($lineInfoGutter + $lineInfoWidth) * 2;
+$lineWidth: $width + $lineMargin;
 $characterWidth: $width - $characterMargin * 2;
 $parenWidth: $width - $parenMargin * 2;
 $dialogueWidth: $width - $dialogueMargin * 2;
@@ -20,19 +21,23 @@ $lightLineColor: #333;
 $lightLineHoverColor: #000;
 $lightLineInfoColor: #aaa;
 $lightLineInfoHoverColor: #000;
+$lightNotesColor: #666;
 
 $darkBgColor: #222;
 $darkLineColor: #ccc;
 $darkLineHoverColor: #fff;
 $darkLineInfoColor: #444;
 $darkLineInfoHoverColor: #888;
+$darkNotesColor: #444;
 
 * {
   font-family: $fontFamily;
   font-size: $fontSize;
+  line-height: $lineHeight;
 }
 
 body {
+  -webkit-font-smoothing: antialiased;
   background-color: $lightBgColor;
   color: $lightLineColor;
 }
@@ -57,22 +62,24 @@ body {
 
 .line {
   width: $lineWidth;
+  position: relative;
   .line-number {
-    float: left;
-    width: $lineNumberWidth;
+    position: absolute;
+    left: 0;
+    width: $lineInfoWidth;
     margin-right: $lineInfoGutter;
     color: $lightLineInfoColor;
   }
   .line-body {
-    float: left;
     width: $width;
+    @include centerMargin;
   }
   .line-type {
-    float: left;
-    width: $lineTypeWidth;
+    position: absolute;
+    right: 0;
+    width: $lineInfoWidth;
     margin-left: $lineInfoGutter;
     color: $lightLineInfoColor;
-    overflow-x: hidden;
   }
   &:hover {
     .line-number,
@@ -81,6 +88,9 @@ body {
     }
     .line-body {
       color: $lightLineHoverColor;
+    }
+    .notes {
+      color: $lightLineColor;
     }
   }
   @include clearfix;
@@ -109,8 +119,22 @@ body {
   text-align: center;
 }
 
+.titles {
+  margin: 5em auto;
+}
+
 .title-page {
-  text-align: center;
+  .line-body {
+    text-align: center;
+  }
+  &.credit, &.copyright, &.contact {
+    margin-top: 1em;
+  }
+}
+
+.notes {
+  font-style: italic;
+  color: $lightNotesColor;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -131,6 +155,12 @@ body {
       .line-body {
         color: $darkLineHoverColor;
       }
+      .notes {
+        color: $darkLineColor;
+      }
     }
+  }
+  .notes {
+    color: $darkNotesColor;
   }
 }

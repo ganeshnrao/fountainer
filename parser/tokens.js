@@ -206,7 +206,7 @@ const definitions = {
   },
   [names.transition]: {
     name: names.transition,
-    regex: /^\s*(?<transition>(FADE [^a-z]+:)|([^a-z]+ TO:)\s*)|(>\s*(?<pTransition>[^<]+))$/,
+    regex: /^\s*(?<transition>(FADE [^a-z]+:)|([^a-z]+ TO:)\s*)$|^\s*(>\s*(?<pTransition>[^<]+))$/,
     next: prioritize([
       names.empty,
       names.scene,

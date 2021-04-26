@@ -1,5 +1,5 @@
 const { each } = require('lodash')
-const prepare = require('./prepare')
+const { prepare } = require('./prepare')
 const { definitions, getToken, names, namesByPriority } = require('./tokens')
 
 function parseLine(line, context, next, prevLine) {
@@ -31,9 +31,10 @@ function parseLine(line, context, next, prevLine) {
   return { name: names.action, text: line }
 }
 
-module.exports = function parse(fountainString) {
-  const lines = prepare(fountainString)
+module.exports = function parse(fountainString, keepNotes = false) {
+  const lines = prepare(fountainString, keepNotes)
   const titlePage = {}
+  const titlePageLines = []
   let context = {}
   let next = [names.titlePage]
   let prevLine = null
@@ -49,10 +50,11 @@ module.exports = function parse(fountainString) {
         titlePage[field] = titlePage[field] || []
         titlePage[field].push(text)
       }
+      titlePageLines.push(prevLine)
     } else {
       acc.push(prevLine)
     }
     return acc
   }, [])
-  return { titlePage, lines: result }
+  return { titlePage, lines: result, titlePageLines }
 }

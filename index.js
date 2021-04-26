@@ -14,14 +14,16 @@ const { sample } = yargs.options({
 
 const samplePath = path.resolve(__dirname, sample)
 const htmlPath = path.resolve(__dirname, 'dist/index.html')
+const jsonPath = path.resolve(__dirname, 'dist/parsed.json')
 
 async function main() {
   console.log(`Building ${sample}`)
   const outputDir = path.dirname(htmlPath)
   const fountainString = fs.readFileSync(samplePath, 'utf-8')
-  const parsed = parse(fountainString)
+  const parsed = parse(fountainString, true)
   const html = await toHtml(parsed)
   fs.ensureDirSync(outputDir)
+  fs.writeFileSync(jsonPath, JSON.stringify(parsed, null, '  '))
   fs.writeFileSync(htmlPath, html)
 }
 

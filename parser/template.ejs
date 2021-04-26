@@ -4,11 +4,18 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= _.get(titlePage, 'title', '') %></title>
+  <title><%= titlePage.title %></title>
   <%= css ? `<style>${css}</style>` : '' %>
 </head>
 <body>
   <div class="script">
+    <div class="titles">
+      <% _.forOwn(titlePage, (lines, field) => { %>
+        <div class="line title-page <%= field %>">
+          <div class="line-body"><%= lines.join('<br>') %></div>
+        </div>
+      <% }) %>
+    </div>
     <% _.each(lines, ({ text, name, field = '', lineNumber }) => { %>
       <div class="line">
         <div class="line-number"><%= lineNumber %></div>
