@@ -7,7 +7,6 @@ const names = {
   default: 'default',
   dialogue: 'dialogue',
   empty: 'empty',
-  notes: 'notes',
   pageBreak: 'page-break',
   paren: 'paren',
   scene: 'scene',
@@ -68,7 +67,6 @@ const definitions = {
       names.synopsis,
       names.centered,
       names.character,
-      names.notes,
       names.action
     ]),
     regex: /^\s*>+\s*(?<centered>.*?)\s*<+\s*$/,
@@ -114,21 +112,6 @@ const definitions = {
     ]),
     post() {
       return { text: '' }
-    }
-  },
-  [names.notes]: {
-    name: names.notes,
-    regex: /(\[\[([^\]]+)(\]\])*)|([^\][]+\]\])/gi,
-    post(matches, line) {
-      let text = line
-      const notes = []
-      matches.forEach((match) => {
-        text = text.replace(match, '')
-        notes.push(match.replace(/(\[\[\s*|\s*\]\]?)/g, ''))
-      })
-      const lastNote = matches.pop()
-      const isInsideNote = !lastNote.endsWith(']]')
-      return { text, notes, context: { isInsideNote } }
     }
   },
   [names.pageBreak]: {

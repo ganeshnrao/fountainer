@@ -5,15 +5,16 @@ const { definitions, getToken, names, namesByPriority } = require('./tokens')
 const getGitString = require('./git')
 const logger = require('./logger')
 
+const defaultChecks = [names.pageBreak]
+
 function parseLine(line, context, next, prevLine) {
   let result = null
-  each(next, (name) => {
+  each([...next, ...defaultChecks], (name) => {
     result = getToken(definitions[name], line)
     if (result) {
       return false
     }
   })
-  result = result || getToken(definitions[names.pageBreak], line)
   if (result) {
     return result
   }

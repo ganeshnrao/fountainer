@@ -13,7 +13,6 @@ const options = {
     alias: 'i',
     description: 'complete path to Fountain file',
     type: 'string',
-    required: true,
     coerce(inputFile) {
       return path.resolve(inputFile)
     }
@@ -59,7 +58,6 @@ const options = {
   },
   outputFile: {
     alias: 'o',
-    required: true,
     type: 'string',
     description: 'complete path to output HTML file',
     coerce(outputFile) {
@@ -81,17 +79,47 @@ const options = {
     coerce(template) {
       return path.resolve(template)
     }
+  },
+  showTemplate: {
+    description: 'echo the default EJS template',
+    type: 'boolean',
+    default: false
+  },
+  showScss: {
+    description: 'echo the default SCSS file',
+    type: 'boolean',
+    default: false
   }
 }
 const args = yargs
   .usage(`\n${displayName}\n  ${description}`)
   .options(options)
   .showHelpOnFail(true)
-  .help().argv
+  .help()
+  .check((args) => {
+    if (args.showScss || args.showTemplate) {
+      return args
+    }
+    if (!args.inputFile || !args.outputFile) {
+      throw new Error(
+        'Invalid arguments, --inputFile and --outputFile must be provided'
+      )
+    }
+    args.keepNotes = args.keepNotes ? 'inline-notes' : null
+    return args
+  }).argv
 
 logger.verbose = args.verbose ? console.debug : noop
 
 async function main() {
+  if (args.showTemplate) {
+    console.log(fs.readFileSync(args.templatePath, 'utf-8').toString())
+    return
+  }
+  if (args.showScss) {
+    console.log(fs.readFileSync(args.stylesPath, 'utf-8').toString())
+    return
+  }
   const startMs = Date.now()
   logger.verbose()
   logger.verbose(`${displayName} arguments:`)

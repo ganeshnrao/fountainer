@@ -105,6 +105,22 @@ will be kept]] some more text`,
     ]
   },
   {
+    fn: (input) => prepare(input, 'notes'),
+    name: 'keep whole line notes',
+    input: `[[hello world this note 
+will be kept some more text]]`,
+    expected: [
+      {
+        line: '<span class="notes">hello world this note </span>',
+        lineNumber: 1
+      },
+      {
+        line: '<span class="notes">will be kept some more text</span>',
+        lineNumber: 2
+      }
+    ]
+  },
+  {
     fn: prepare,
     name: 'multiline styles',
     input: `this **bold string
