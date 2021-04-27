@@ -8,8 +8,7 @@
     "fountainer": "index.js"
   },
   "scripts": {
-    "sample": "node index.js -i sample.theBigFish.fountain -o dist/index.html && npm run serve",
-    "serve": "php -S localhost:9000 -t dist",
+    "watch": "node index.js -i sample.theBigFish.fountain -o dist/index.html -w",
     "testone": "NODE_ENV=test nyc --reporter=html --reporter=text ava",
     "test": "npm run testone 'test/**/*.spec.js'"
   },
@@ -36,6 +35,7 @@
     "html-minifier": "^4.0.0",
     "lodash": "^4.17.21",
     "sass": "^1.32.11",
+    "serve-handler": "^6.1.3",
     "yargs": "^16.2.0"
   }
 }

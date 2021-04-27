@@ -2,6 +2,18 @@
 
 Fountainer is a Javascript CLI tool to convert screenplays written using Fountain syntax into HTML files.
 
+----
+
+**Contents**
+- [Fountainer](#fountainer)
+  - [Installation](#installation)
+  - [CLI Usage](#cli-usage)
+  - [Javascript API Usage](#javascript-api-usage)
+    - [`fountainer.parse(options)`](#fountainerparseoptions)
+    - [`fountainer.toHtml(parsed, options)`](#fountainertohtmlparsed-options)
+    - [`options`](#options)
+  - [Customizing template and themes](#customizing-template-and-themes)
+
 ## Installation
 
 To install the CLI globally run the following command.
@@ -39,6 +51,7 @@ The tool accepts the following arguments
 | | `showTemplate` | print `<default template>` to console |
 | | `showScss` | print `<default SCSS>` file to console |
 | `w` | `watch` | set this flag to watch `inputFile` and recompile on change |
+| | `port` | applicable only when `watch` is set, controls the port on which the compiled file will be served when watching |
 | | `help` | Show help | |
 
 ## Javascript API Usage
@@ -77,7 +90,8 @@ This method generates an HTML string by using the result of the `parse` function
   templatePath: '' // path to custom EJS/HTML file
 }
 ```
-### Customizing template and themes
+
+## Customizing template and themes
 You can start customizing your theme by first copying the default template and theme as follows.
 ```bash
 fountainer --showTemplate > template.ejs

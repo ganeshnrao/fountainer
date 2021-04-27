@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
 const { debounce, forOwn, noop } = require('lodash')
+const serve = require('serve-handler')
 const fs = require('fs-extra')
 const path = require('path')
+const { createServer } = require('http')
 const yargs = require('yargs')
 const { parse, toHtml } = require('./parser')
 const { displayName, description } = require('./package.json')
@@ -95,6 +97,11 @@ const options = {
     description: 'will watch the inputFile for changes',
     type: 'boolean',
     default: false
+  },
+  port: {
+    description: 'port on which to serve the compiled file when --watch is set',
+    type: 'number',
+    default: 9000
   }
 }
 const args = yargs
@@ -153,6 +160,17 @@ const debouncedCompile = debounce(compile, 1000)
 function main() {
   compile()
   if (args.watch) {
+    const config = { public: 'dist' }
+    const server = createServer((request, response) =>
+      serve(request, response, config)
+    )
+    server.listen(args.port, () => {
+      const inputFileRelative = path.relative(process.cwd(), args.inputFile)
+      console.log(`${displayName} is watching:`)
+      console.log(`  * Input file ${inputFileRelative}`)
+      console.log(`  * Serving http://localhost:${args.port}`)
+      console.log()
+    })
     fs.watch(args.inputFile, debouncedCompile)
   }
 }
