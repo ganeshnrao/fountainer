@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { forOwn, noop } = require('lodash')
+const { debounce, forOwn, noop } = require('lodash')
 const fs = require('fs-extra')
 const path = require('path')
 const yargs = require('yargs')
@@ -89,6 +89,12 @@ const options = {
     description: 'echo the default SCSS file',
     type: 'boolean',
     default: false
+  },
+  watch: {
+    alias: 'w',
+    description: 'will watch the inputFile for changes',
+    type: 'boolean',
+    default: false
   }
 }
 const args = yargs
@@ -111,33 +117,44 @@ const args = yargs
 
 logger.verbose = args.verbose ? console.debug : noop
 
-async function main() {
-  if (args.showTemplate) {
-    console.log(fs.readFileSync(args.templatePath, 'utf-8').toString())
-    return
+async function compile() {
+  try {
+    if (args.showTemplate) {
+      console.log(fs.readFileSync(args.templatePath, 'utf-8').toString())
+      return
+    }
+    if (args.showScss) {
+      console.log(fs.readFileSync(args.stylesPath, 'utf-8').toString())
+      return
+    }
+    const startMs = Date.now()
+    logger.verbose()
+    logger.verbose(`${displayName} arguments:`)
+    forOwn(options, (value, key) =>
+      logger.verbose(`   --${key.padEnd(12)} = ${args[key]}`)
+    )
+    const { outputFile } = args
+    const parsed = await parse(args)
+    const html = toHtml(parsed, args)
+    const outputDir = path.dirname(outputFile)
+    await fs.ensureDir(outputDir)
+    await fs.writeFile(outputFile, html)
+    const duration = Date.now() - startMs
+    logger.verbose()
+    logger.log(`Created ${outputFile} (${duration}ms)`)
+  } catch (error) {
+    console.error(error)
+    process.exit(1)
   }
-  if (args.showScss) {
-    console.log(fs.readFileSync(args.stylesPath, 'utf-8').toString())
-    return
-  }
-  const startMs = Date.now()
-  logger.verbose()
-  logger.verbose(`${displayName} arguments:`)
-  forOwn(options, (value, key) =>
-    logger.verbose(`   --${key.padEnd(12)} = ${args[key]}`)
-  )
-  const { outputFile } = args
-  const parsed = await parse(args)
-  const html = toHtml(parsed, args)
-  const outputDir = path.dirname(outputFile)
-  await fs.ensureDir(outputDir)
-  await fs.writeFile(outputFile, html)
-  const duration = Date.now() - startMs
-  logger.verbose()
-  logger.verbose(`Created ${outputFile} (${duration}ms)`)
 }
 
-main().catch((error) => {
-  logger.error(error)
-  process.exit(1)
-})
+const debouncedCompile = debounce(compile, 1000)
+
+function main() {
+  compile()
+  if (args.watch) {
+    fs.watch(args.inputFile, debouncedCompile)
+  }
+}
+
+main()
