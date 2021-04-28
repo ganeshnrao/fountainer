@@ -160,15 +160,19 @@ const debouncedCompile = debounce(compile, 1000)
 function main() {
   compile()
   if (args.watch) {
-    const config = { public: 'dist' }
+    const servePath = path.dirname(args.outputFile)
+    const config = { public: servePath, renderSingle: true }
     const server = createServer((request, response) =>
       serve(request, response, config)
     )
     server.listen(args.port, () => {
-      const inputFileRelative = path.relative(process.cwd(), args.inputFile)
+      const cwd = process.cwd()
+      const inputFileRelative = path.relative(cwd, args.inputFile)
+      const servePathRelative = path.relative(cwd, servePath)
       console.log(`${displayName} is watching:`)
       console.log(`  * Input file ${inputFileRelative}`)
-      console.log(`  * Serving http://localhost:${args.port}`)
+      console.log(`  * Serving ${servePathRelative}/`)
+      console.log(`  * Server http://localhost:${args.port}`)
       console.log()
     })
     fs.watch(args.inputFile, debouncedCompile)
