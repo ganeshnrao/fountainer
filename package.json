@@ -1,7 +1,7 @@
 {
   "name": "fountainer",
   "displayName": "Fountainer",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Convert screenplays written using the Fountain syntax into HTML files",
   "main": "index.js",
   "bin": {
